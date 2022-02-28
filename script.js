@@ -1,25 +1,4 @@
-/** FUNCTION DEFINITIONS **/
-/**String verification**/
-function compareString(string, callbackFunction){
-    var doesEveryLetterMatch = true;
 
-    for(var i=0; i<string.length;i++){
-        doesEveryLetterMatch = callbackFunction(string[i]);
-    }
-    return doesEveryLetterMatch;
-}
-/**Array verification**/
-function checkArray(data){
-    if (toString.call(data) === "[object Array]")
-        return true;
-    return false;
-}
-/**Array length**/
-function checkLength(array, callback){
-    if (array.length === 2)
-        return true;
-    else return false;
-}
 /**
  * Asserts "expected" versus "actual",
  * 'failing' the assertion (via Error) if a difference is found.
@@ -29,58 +8,32 @@ function checkLength(array, callback){
  * @param {*} actual The actual item
  */
 function assertEquals(message, expected, actual) {
-    if (expected === actual){
-        console.log('passed');
+    console.log("message: " + message + " || expected: " + expected + " || actual: "  + actual)
+    // Check that input is valid.
+    if (actual == null) {
+        throw new Error(message + " Expected " +  expected + " but was not found");
+
     }
-    else
-        console.log('FAILED [' + message + '] Expected "'+
-            expected + '", but got "' + actual + '"');
+    // Check for type of arguments.
+    console.log(typeof actual);
+    console.log(typeof expected)
+    if (Object.prototype.toString.call(actual) != Object.prototype.toString.call(expected)) {
+        throw new Error(message + " Expected type " + (Object.prototype.toString.call(expected)) + " but found type " + (Object.prototype.toString.call(actual)));
+
+    }
+    // Check string length.
+    if (expected.length != actual.length) {
+        throw new Error(message + " Expected array length " + expected.length + " but found " + actual.length);
+    }
+
+    // Compare each letter of string for equality.
+    for (let i = 0; i < expected.length; i++) {
+        if(expected[i] != actual[i]) {
+            throw new Error(message + " expected \"" + expected + "\" but found \"" + actual + "\"");
+        }
+    }
+    // Code has reached here and no mis-match was found.
 }
-
-
-/* -- Test running code:  --- */
-
-/**
- * Runs a "assertEquals" test.
- *
- * @param {String} message The initial message to pass
- * @param {Array} assertionFailures List of messages that will be displayed on the UI for evaluation
- * @param {*} expected Expected item
- * @param {*} actual The actual item
- */
-
-/*TEST CASES*/
-/* String verification */
-
-function abcdef(actual_02, expected_02){
-    return actual_02.localeCompare(expected_02);
-}
-
-var stringTrue = "abcdef";
-var actualTrue = compareString(stringTrue, abcdef);
-assertEquals('Test 02: Expected "abcdef" found "abcdef"',actualTrue, true);
-
-var stringFalse = "abc";
-var actualFalse = compareString(stringFalse, abcdef);
-assertEquals('Test 02: Expected "abcdef" found "abc"', actualFalse, false);
-
-/* type Array */
-var actual_03 = checkArray('testObject');
-assertEqual('Test 03: Expected type Array but found Object',actual_03, false);
-var expected_03 = checkArray([1,2,3]);
-assertEquals('Test 03: Expected type Array and found Array',expected_03, true);
-
-/* type array length 2 */
-var arrayLength2 = [1,2];
-var lengthTrue = checkLength(arrayLength2, length2);
-assertEquals('Test 04: Expected array length 2 found 2', lengthTrue, true);
-
-var arrayLength3 = [1,2,3];
-var lengthFalse=(arrayLength3, length2);
-assertEquals('Test 04: Expected array length 2 but found 3', lengthFalse, false);
-/* type propB.propA[1].propB "b" */
-/* type propB.propC */
-/* type null */
 function runTest(message, assertionFailures, expected, actual) {
     try {
         assertEquals(message, expected, actual);
@@ -135,6 +88,7 @@ function runAll() {
     runTest('Test 08: ', assertionFailures, complexObject1, complexObject3);
     runTest('Test 09: ', assertionFailures, null, {});
 
+    console.log(assertionFailures)
 
     // Output the results
     var messagesEl = document.getElementById('messages');
